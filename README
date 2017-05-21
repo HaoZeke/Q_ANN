@@ -1,0 +1,160 @@
+############################ COPYRIGHT NOTICE ##################################
+
+Code provided by G. Carleo and M. Troyer, written by G. Carleo, December 2016.
+
+Permission is granted for anyone to copy, use, modify, or distribute the
+accompanying programs and documents for any purpose, provided this copyright
+notice is retained and prominently displayed, along with a complete citation of
+the published version of the paper:
+
+ ______________________________________________________________________________
+| G. Carleo, and M. Troyer                                                     |
+| Solving the quantum many-body problem with artificial neural-networks        |
+|______________________________________________________________________________|
+
+The programs and documents are distributed without any warranty, express or
+implied.
+
+These programs were written for research purposes only, and are meant to
+demonstrate and reproduce the main results obtained in the paper.
+
+All use of these programs is entirely at the user's own risk.
+
+################################################################################
+
+
+
+
+
+
+############################ COMPILING THE CODE ################################
+
+The code provided here does not have any external dependence but the standard
+c++ library.
+
+It can be compiled calling the command 'make' in the root directory of this
+package.
+
+The Makefile assumes the existence of a c++11 compliant compiler.
+The default compiler is 'c++', but it can be easily modified editing 'Makefile'
+and setting the variable CXX='your_compiler'.
+
+Once compiled, the executable 'nqs_run' is produced.
+
+################################################################################
+
+
+
+######################### CHOOSING A NQS WAVE-FUNCTION #########################
+
+The user should choose one of the several NQS wave-functions provided with this
+package.
+
+Two types of files are available: ground-state wave-functions and time-evolved
+wave-functions. They are stored, respectively, in the directories 'Ground/' and
+'Unitary/' of this package.
+
+Ground-state files (in Ground/ directory) have the following naming convention:
+
+(1g) Ising1d_NSPINS_HFIELD_ALPHA.wf
+     For the transverse-field Ising model in 1d with periodic boundary
+     conditions, total number of spins NSPINS, and transverse field HFIELD.
+     ALPHA is the hidden-unit density defined in the paper.
+
+(2g) Heisenberg1d_NSPINS_JZ_ALPHA.wf
+     For the Heisenberg model in 1d with periodic boundary conditions,
+     total number of spins NSPINS, and coupling constant JZ.
+     ALPHA is the hidden-unit density defined in the paper.
+
+(3g) Heisenberg2d_NSPINS_JZ_ALPHA.wf
+     For the Heisenberg model on the 2d square lattice with periodic boundary
+     conditions, total number of spins NSPINS, and coupling constant JZ.
+     ALPHA is the hidden-unit density defined in the paper.
+
+
+Time-evolved wave-functions (in Unitary/ directory)' have the following naming
+convention:
+
+(1d) Ising1d_NSPINS_HFIELDFINAL_ALPHA.time_TIME.wf
+     For the transverse-field Ising model in 1d with periodic boundary
+     conditions and total number of spins NSPINS.
+     This series of data refers to the unitary time evolution induced by a
+     quantum quench in the transverse field.
+     The final value of the transverse field is HFIELDFINAL.
+     The corresponding initial values of the field are those reported in the
+     paper.
+     ALPHA is the hidden-unit density defined in the paper.
+     TIME is the time at which the wave-function has been recorded.
+
+(2d) Heisenberg1d_NSPINS_JZFINAL_ALPHA.time_TIME.wf
+     For the Heisenberg model in 1d with periodic boundary
+     conditions and total number of spins NSPINS.
+     This series of data refers to the unitary time evolution induced by a
+     quantum quench in the coupling constant J_z.
+     The final value of the coupling constant is JZFINAL.
+     The initial value is J_z=1.
+     ALPHA is the hidden-unit density defined in the paper.
+     TIME is the time at which the wave-function has been recorded.
+
+################################################################################
+
+
+
+
+############################ RUNNING THE CODE ##################################
+
+Once a given wave-function has been chosen, the user is presented with two
+possibilities:
+
+(1r) Sample from the wave-function and measure the expectation value of the
+     Hamiltonian on the given NQS.
+
+     Minimal usage is achieved with:
+
+     './nqs_run --filename=FILENAME'
+
+     Further options can be specified from the command line.
+     A complete list can be obtained launching './nqs_run' without arguments.
+
+(2r) Sample from the wave-function, measure the expectation value of the
+     Hamiltonian on the given NQS and print the sampled many-body configurations
+     on a given file.
+
+     Minimal usage is achieved with:
+
+     './nqs_run --filename=FILENAME --filestates=FILESTATES'
+
+     Here FILESTATES is a filename chosen by the user.
+     Sampled configurations are written on this file.
+
+     After the run is completed the file FILESTATES contains, on every row,
+     a sampled many-body configuration in the format (1 -1 1 ..-1),
+     where each +/-1 is the value of the Sigma_z spin projection on a given
+     site.
+
+     These data can be further processed at will by the user to obtain arbitrary
+     diagonal expectation values over the square-modulus of the wave-function.
+
+################################################################################
+
+
+
+
+############################## FURTHER REMARKS #################################
+
+(1R) This simple code does not exploit parallel computing. On large
+     problems, with a large value of ALPHA and NSPINS, the single-core running
+     time can be significant. In a production setting, the Monte Carlo sampling
+     can however be parallelized in a straightforward (and very efficient) way.
+
+(2R) The error bars on the energy are estimated with a simple binning analysis
+     with fixed number of blocks (50 in the default implementation).
+
+     The estimated error bars are reliable provided that the block size
+     (printed by the code) is significantly larger than the estimated
+     correlation time.
+
+     If this is not the case, the user can increase the number of sweeps with
+     the option -nsweeps=NSWEEPS.
+
+################################################################################
